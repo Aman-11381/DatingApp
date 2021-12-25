@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -34,6 +35,20 @@ namespace API.Controllers
             return  await _userRepository.GetMemberAsync(username);
         }
 
-        
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto) {
+            // this gives us the username from the token that the API uses to authenticate this user
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+
+            _mapper.Map(memberUpdateDto, user);
+
+            // now our user object is flagged as being updated by entity framework
+            _userRepository.Update(user);
+
+            if(await _userRepository.SaveAllAsync()) return NoContent();
+            
+            return BadRequest("Failed to update the user");
+        }
     }
 }
