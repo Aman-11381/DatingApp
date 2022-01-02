@@ -26,12 +26,7 @@ namespace API.Entities
         // this is a one to many relationship meaning one user can have many photos
         public ICollection<Photo> Photos { get; set; }
 
-        // there are plenty of methods inside the DateTime class but it doesn't give us an option to calculate age
-        // So what we're going to do is extend the functionality of the daytime class so that we can calculate the age based on DOB
-
-        // public int GetAge()
-        // {
-        //     return DateOfBirth.CalculateAge();
-        // }     
+        public ICollection<UserLike> LikedByUsers { get; set; }     
+        public ICollection<UserLike> LikedUsers { get; set; }
     }
 }
